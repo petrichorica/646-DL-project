@@ -1,7 +1,7 @@
 # 646-DL-project
 ## Team Member
-Yidan Cheng
-Ruiqi Liu
+Yidan Cheng\
+Ruiqi Liu\
 Jiarui Liang
 
 ## Todo List

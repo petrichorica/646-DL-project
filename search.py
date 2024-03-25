@@ -1,15 +1,18 @@
 from PIL import Image
 import requests
 import torch
-from transformers import AutoProcessor, CLIPVisionModel
+from transformers import AutoProcessor, AutoModel, CLIPVisionModel
 import faiss
 import os
 import json
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
-model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
-processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
+#load in model and processor
+# model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
+# processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
+model = AutoModel.from_pretrained("google/siglip-base-patch16-224")
+processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
 
 def get_image_embedding(frame):
     image = frame.convert("RGB")
@@ -19,10 +22,13 @@ def get_image_embedding(frame):
     features = torch.flatten(features, start_dim=1)
     return features.detach().numpy()
 
+
+#load in user query
 query_url = "https://static.flickr.com/2432/3801566410_bca2441029.jpg"
 query_image = Image.open(requests.get(query_url, stream=True).raw)
 query_embedding = get_image_embedding(query_image)
 
+#search based on similarity
 index = faiss.read_index("clip-image-index.bin")
 results_num = 3
 D, I = index.search(query_embedding, results_num)
@@ -30,6 +36,7 @@ D, I = index.search(query_embedding, results_num)
 image_urls = open("image_urls.json", "r").read()
 train_images = json.loads(image_urls)
 
+#display search results
 for i in I[0]:
     img_url = train_images[i]
     try:

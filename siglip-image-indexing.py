@@ -13,7 +13,6 @@ index = faiss.IndexFlatL2(extractor.shape)
 train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
 train_images = open(train_images_path, "r").readlines()
 #load in storage path
-# image_root = './dataset/paris'
 feature_root = './indexed_dataset/'
 
 image_urls = []

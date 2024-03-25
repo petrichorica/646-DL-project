@@ -17,7 +17,7 @@ class mySigLipModel(nn.Module):
         # image = transform(image)
         inputs = self.processor(images=image, return_tensors="pt")
         outputs = self.model.get_image_features(**inputs)
-        features = torch.flatten(outputs, start_dim=1)
+        # features = torch.flatten(outputs, start_dim=1)
         return outputs.detach().numpy()
     
 class mySigLipVisionModel(nn.Module):

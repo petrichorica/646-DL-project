@@ -2,12 +2,12 @@ from PIL import Image
 import requests
 import faiss
 import json
-from extract_features import mySigLip
+from extract_features import mySigLipModel
 
 #load in the embedding extractor
-extractor = mySigLip()
+extractor = mySigLipModel()
 #load in indexer
-index = faiss.IndexFlatL2(38400)
+index = faiss.IndexFlatL2(extractor.shape)
 #load in image dataset
 train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
 train_images = open(train_images_path, "r").readlines()

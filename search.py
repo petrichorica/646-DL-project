@@ -3,12 +3,12 @@ import requests
 import faiss
 import os
 import json
-from extract_features import mySigLip
+from extract_features import mySigLipModel
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 #load in the embedding extractor
-extractor = mySigLip()
+extractor = mySigLipModel()
 
 #load in user query
 query_url = "https://static.flickr.com/2432/3801566410_bca2441029.jpg"

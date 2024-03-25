@@ -1,32 +1,19 @@
 from PIL import Image
 import requests
-import torch
-from transformers import AutoProcessor, AutoModel, CLIPVisionModel
 import faiss
 import os
 import json
+from extract_features import mySigLip
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
-#load in model and processor
-# model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
-# processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
-model = AutoModel.from_pretrained("google/siglip-base-patch16-224")
-processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
-
-def get_image_embedding(frame):
-    image = frame.convert("RGB")
-    inputs = processor(images=image, return_tensors="pt")
-    outputs = model(**inputs)
-    features = outputs.last_hidden_state
-    features = torch.flatten(features, start_dim=1)
-    return features.detach().numpy()
-
+#load in the embedding extractor
+extractor = mySigLip()
 
 #load in user query
 query_url = "https://static.flickr.com/2432/3801566410_bca2441029.jpg"
 query_image = Image.open(requests.get(query_url, stream=True).raw)
-query_embedding = get_image_embedding(query_image)
+query_embedding = extractor.get_image_embedding(query_image)
 
 #search based on similarity
 index = faiss.read_index("clip-image-index.bin")

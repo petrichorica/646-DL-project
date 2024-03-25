@@ -1,28 +1,12 @@
 from PIL import Image
 import requests
-import torch
-from transformers import AutoProcessor, AutoModel, CLIPVisionModel
 import faiss
 import json
+from extract_features import mySigLip
 
-#load in the model and processor
-# model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
-# processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch32")
-model = AutoModel.from_pretrained("google/siglip-base-patch16-224")
-processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
-
-def get_image_embedding(frame):
-    image = frame.convert("RGB") #Report: why doing this?
-    # transform = transforms.Compose([transforms.Normalize(mean=[0.485, 0.456, 0.406], 
-    #                                                         std=[0.229, 0.224, 0.225])])
-    # image = transform(image)
-    inputs = processor(images=image, return_tensors="pt")
-    with torch.no_grad():
-        outputs = model(**inputs)
-        features = outputs.last_hidden_state                #Report: why doing this?
-        features = torch.flatten(features, start_dim=1)
-    return features.detach().numpy()
-
+#load in the embedding extractor
+extractor = mySigLip()
+#load in indexer
 index = faiss.IndexFlatL2(38400)
 #load in image dataset
 train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
@@ -38,7 +22,7 @@ for img_url in train_images[:100]:
         print(f"Failed to load image {img_url}")
         continue
     image_urls.append(img_url)
-    embedding = get_image_embedding(frame)
+    embedding = extractor.get_image_embedding(frame)
     index.add(embedding)
     print(f"Added image {img_url} to index")
 

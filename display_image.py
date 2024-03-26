@@ -2,10 +2,11 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import requests
 import json
+import util
 
 class ImageDisplay():
     def __init__(self):
-        self.image_path = "./indexed_dataset/siglip_image_urls.json"
+        self.image_path = util.image_path
         self.image_urls = open(self.image_path, "r").read()
         self.train_images = json.loads(self.image_urls)
 

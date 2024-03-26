@@ -4,10 +4,11 @@ import faiss
 import os
 from extract_features import mySigLipModel
 from display_image import ImageDisplay
+import util
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-feature_root = './indexed_dataset/'
-index_path = feature_root + "siglip-image-index.bin"
+feature_root = util.feature_root
+index_path = util.index_path
 
 #load in the embedding extractor
 extractor = mySigLipModel()

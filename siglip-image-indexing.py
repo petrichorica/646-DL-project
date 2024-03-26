@@ -4,23 +4,24 @@ import faiss
 import json
 from extract_features import mySigLipModel
 import time
+import util
 
 #load in the embedding extractor
 extractor = mySigLipModel()
 #load in indexer
 index = faiss.IndexFlatL2(extractor.shape)
 #load in image dataset
-train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
-train_images = open(train_images_path, "r").readlines()
+# train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
+train_images = open(util.train_images_path, "r").readlines()
 #load in storage path
-feature_root = './indexed_dataset/'
+feature_root = util.feature_root
 
 image_urls = []
 
 print("start indexing...")
 start = time.time()
 
-for img_url in train_images[:100]:
+for img_url in train_images[1000:2000]:
     img_url = img_url.strip()
     try:
         frame = Image.open(requests.get(img_url, stream=True).raw)
@@ -35,7 +36,7 @@ for img_url in train_images[:100]:
 
 end = time.time()
 print('Finish in ' + str(end - start) + ' seconds')
-faiss.write_index(index, feature_root + "siglip-image-index.bin")
+faiss.write_index(index, util.index_path)
 
-with open(feature_root + "siglip_image_urls.json", "w") as f:
+with open(util.image_path, "w") as f:
     json.dump(image_urls, f, indent=2)

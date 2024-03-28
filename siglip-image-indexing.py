@@ -21,7 +21,7 @@ image_urls = []
 print("start indexing...")
 start = time.time()
 
-for img_url in train_images[2000:3000]:
+for img_url in train_images[8000:10000]:
     img_url = img_url.strip()
     try:
         frame = Image.open(requests.get(img_url, stream=True).raw)

@@ -53,3 +53,28 @@ class ImageDisplay():
                 continue
             frame.show()
             print(f"Image {img_url} is similar to query image")
+
+    def display3(self, query_image, results):
+        k = len(results)
+        fig = plt.figure(figsize=(3 * k, 6))
+        query_ax = fig.add_subplot(2, k, 1)
+        query_ax.set_title("Query Image")
+        query_ax.set_axis_off()
+        # query_image.thumbnail((512, 512))
+        query_ax.imshow(query_image)
+
+        for i, result in enumerate(results):
+            img_url = self.train_images[result]
+            try:
+                frame = Image.open(requests.get(img_url, stream=True).raw)
+            except:
+                print(f"Failed to load image {img_url}")
+                continue
+            ax = fig.add_subplot(2, k, k + i + 1)
+            ax.set_title(f"Result {i + 1}")
+            ax.set_axis_off()
+            # frame.thumbnail((512, 512))
+            ax.imshow(frame)
+        
+        plt.show()
+        fig.savefig(util.evaluation_path + "search_results.png")

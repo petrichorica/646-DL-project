@@ -16,18 +16,18 @@ extractor = mySigLipModel()
 display = ImageDisplay()
 
 #load in user query
-query_url = "https://static.flickr.com/2432/3801566410_bca2441029.jpg"
+query_url = "http://static.flickr.com/2291/2252298370_3c38a5f6f5.jpg"
 query_image = Image.open(requests.get(query_url, stream=True).raw)
 query_embedding = extractor.get_image_embedding(query_image)
 
 #search based on similarity
 index = faiss.read_index(index_path)
-results_num = 3
+results_num = 5
 D, I = index.search(query_embedding, results_num)
 results = I[0]
 
 #display the results
-display.display_image(results, query_url, results_num+1, 1)
+display.display3(query_image, results)
 
 # Path: clip-image-index.bin
 # This file contains the index of image embeddings created using the clip-image-index.py script.

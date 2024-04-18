@@ -1,5 +1,6 @@
 import faiss
 import json
+import os
 
 def merge_index():
     index_file1 = './indexed_dataset/siglip-image-index-0-1000.bin'
@@ -10,6 +11,8 @@ def merge_index():
     index_file6 = './indexed_dataset/siglip-image-index-8000-10000.bin'
 
     index_files = [index_file1, index_file2, index_file3, index_file4, index_file5, index_file6]
+
+    index_files = [f for f in os.listdir('./indexed_0-100k') if os.path.isfile(os.path.join('./indexed_0-100k', f)) and f.endswith('.bin')]
 
     new_index_file = './indexed_dataset/siglip-image-index-0-10000.bin'
 

@@ -1,7 +1,7 @@
 feature_root = './indexed_60k-100k/'
 
-start_idx = 72000
-end_idx = 78000
+start_idx = 88000
+end_idx = 100000
 
 index_path = feature_root + "siglip-image-index-{}k-{}k.bin".format(start_idx//1000, end_idx//1000)
 image_path = feature_root + "siglip_image_urls-{}k-{}k.json".format(start_idx//1000, end_idx//1000)

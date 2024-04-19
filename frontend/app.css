@@ -1,0 +1,97 @@
+body {
+  font-family: Arial, sans-serif;
+}
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+select, input[type="text"], input[type="file"], input[type="submit"] {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+.select-column {
+  flex: 0 0 200px; /* Fixed width for the left and right columns */
+}
+
+.btn-column {
+  flex: 0 0 100px; /* Fixed width for the left and right columns */
+}
+
+.form-column {
+  flex: 0 0 500px; /* Fixed width for the left and right columns */
+}
+
+.justify-content {
+  display: flex;
+  justify-content: space-between; /* Justify content evenly within the column */
+  flex-direction: column; /* Arrange content vertically */
+  height: 100%; /* Ensure the column takes up full height */
+}
+
+.center-content {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: 100%; /* Ensure the column takes up full height */
+}
+
+.align-bottom{
+  margin-top:33px;
+}
+
+
+
+.select-size{
+  padding-top:10px;
+  padding-bottom: 10px;
+}
+/* html,
+body,
+.intro {
+  height: 100%;
+}
+
+.form-outline .form-control:focus~.form-notch .form-notch-leading {
+  border-top: 0.1rem solid #00b74a;
+  border-bottom: 0.1rem solid #00b74a;
+  border-left: 0.1rem solid #00b74a;
+}
+.form-outline .form-control:focus~.form-notch .form-notch-middle {
+  border-color: #00b74a;
+}
+.form-outline .form-control:focus~.form-notch .form-notch-trailing {
+  border-top: 0.1rem solid #00b74a;
+  border-bottom: 0.1rem solid #00b74a;
+  border-right: 0.1rem solid #00b74a;
+}
+.form-outline .form-control:focus~.form-label {
+  color: #00b74a;
+}
+.autocomplete-input.focused~.form-notch .form-notch-leading {
+  border-top: 2px solid #00b74a;
+  border-bottom: 2px solid #00b74a;
+  border-left: 2px solid #00b74a;
+  transition: all 0.2s linear;
+}
+.autocomplete-input.focused~.form-notch .form-notch-middle {
+  border-color: #00b74a;
+}
+.autocomplete-input.focused~.form-notch .form-notch-trailing {
+  border-color: #00b74a;
+}
+.autocomplete-input.focused~.autocomplete-label {
+  color: #00b74a;
+} */

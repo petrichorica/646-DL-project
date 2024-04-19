@@ -16,7 +16,7 @@ extractor = mySigLipModel()
 display = ImageDisplay()
 
 #load in user query
-query_url = "http://static.flickr.com/2291/2252298370_3c38a5f6f5.jpg"
+query_url = util.query_url
 query_image = Image.open(requests.get(query_url, stream=True).raw)
 query_embedding = extractor.get_image_embedding(query_image)
 

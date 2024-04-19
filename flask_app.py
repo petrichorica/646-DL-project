@@ -56,17 +56,17 @@ def allowed_file(filename):
 @app.route('/search_by_image', methods=['POST'])
 def search_by_image():
     if 'file' not in request.files:
-        return jsonify({'error': 'No file part'})
+        return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
     k = request.args.get('k', 10)
     try:
         k = int(k)
     except ValueError:
-        return jsonify({'error': 'Invalid value for k'})
+        return jsonify({'error': 'Invalid value for k'}), 400
 
     if file.filename == '':
-        return jsonify({'error': 'No selected file'})
+        return jsonify({'error': 'No selected file'}), 400
     
     print("File received:", file.filename)
 
@@ -88,7 +88,7 @@ def search_by_image():
             'images': result_images
         })
     
-    return jsonify({'error': 'Invalid file type'})
+    return jsonify({'error': 'Invalid file type'}), 400
 
 
 if __name__ == '__main__':

@@ -1,5 +1,3 @@
-from PIL import Image
-import requests
 import faiss
 from extract_features import mySigLipModel
 from display_image import ImageDisplay

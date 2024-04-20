@@ -37,21 +37,57 @@
                             <input type="file" id="fileInput" name="image" class="py-1">                                
                         </div>
                     </div>
+                    <div class="col select-column">
+                        <div id="index">
+                            <label for="index" class="form-label">Indexing Method</label>
+                            <select id="indexOption" class="form-select select-size">
+                                <option value="FlatL2">FlatL2</option>
+                                <option value="HSBW">HSBW</option>
+                            </select>
+                        </div>
+
+                    </div>
                    
                     <div class="col btn-column">
-                        <button type="submit" class="btn btn-primary align-bottom">Search</button>
+                        <button id="submitSearch" type="submit" class="btn btn-primary align-bottom">Search</button>
                     </div>
                 </form>
             <!-- </div> -->
             <div class="row justify-content-center">
                 <!-- Placeholder for image display -->
-                <div id="imagePreview" style="display:none;" class="col text-center">
+                <div id="imagePreview" style="display:none;" class="col text-center display-column">
                     <h3>Uploaded Image</h3>
                     <img id="uploadedImage" alt="Image" class="img-fluid">
                 </div>
-                <div class="col text-center">
+                <div class="col text-center result-column">
                     <h3>Search Results</h3>
-                    <img src="image-1.jpg" alt="Image" class="img-fluid" style="display:none;">
+                    <div class="search-result container-fluid" id="results">
+                        <div class="row justify-content-center mb-3">
+                            <div class="col select-column">
+                                <img src="image-1.jpg" alt="Image" class=" img-fluid img-size">
+                            </div>
+                            <div class="col select-column">
+                                <img src="image-1.jpg" alt="Image" class="img-fluid img-size">
+                            </div>
+                            <div class="col select-column">
+                                <img src="image-1.jpg" alt="Image" class="img-fluid img-size">
+                            </div>
+                            
+                        </div>
+                        <div class="row justify-content-center mb-3">
+                            <div class="col select-column">
+                                <img src="image-1.jpg" alt="Image" class="img-fluid img-size">
+                            </div>
+                            <div class="col select-column">
+                                <!-- <img src="image-1.jpg" alt="Image" class="img-fluid img-size"> -->
+                            </div>
+                            <div class="col select-column">
+                                <!-- <img src="image-1.jpg" alt="Image" class="img-fluid img-size"> -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- <img src="image-1.jpg" alt="Image" class="img-fluid" style="display:none;"> -->
                 </div>
             </div>
                 

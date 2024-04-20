@@ -31,7 +31,18 @@ class mySigLipModel(nn.Module):
 #load in the embedding extractor
 extractor = mySigLipModel()
 #load in indexer
-index = faiss.IndexFlatL2(extractor.shape)
+
+'''
+    Select the indexer you want to use
+'''
+
+# # Flat L2
+# index = faiss.IndexFlatL2(extractor.shape)
+
+# HNSW Flat
+M = 16
+index = faiss.IndexHNSWFlat(extractor.shape, M)
+
 #load in image dataset
 # train_images_path = "./dataset/SBU_captioned_photo_dataset_urls.txt"
 train_images = open(util.train_images_path, "r").readlines()

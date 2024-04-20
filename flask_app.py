@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import faiss
 import numpy as np
 import json
@@ -89,6 +89,12 @@ def search_by_image():
         })
     
     return jsonify({'error': 'Invalid file type'}), 400
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return '''
+    <h1>404 Not Found</h1>
+    ''', 404
 
 
 if __name__ == '__main__':

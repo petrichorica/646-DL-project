@@ -19,7 +19,6 @@ class mySigLipModel(nn.Module):
     def get_text_embedding(self, text):
         inputs = self.tokenizer(text, padding="max_length", return_tensors="pt")
         outputs = self.model.get_text_features(**inputs)
-        print(outputs.shape)
         return outputs.detach().numpy()
     
 class mySigLipVisionModel(nn.Module):

@@ -33,16 +33,16 @@
                             <input type="text" id="caption" name="caption" class="py-2" placeholder="Enter caption">
                         </div>
                         <div id="imageInput" style="display:none;">
-                            <label for="image" class="form-label">Upload Image</label>
+                            <label for="fileInput" class="form-label">Upload Image</label>
                             <input type="file" id="fileInput" name="image" class="py-1">                                
                         </div>
                     </div>
                     <div class="col select-column">
                         <div id="index">
-                            <label for="index" class="form-label">Indexing Method</label>
+                            <label for="indexOption" class="form-label">Indexing Method</label>
                             <select id="indexOption" class="form-select select-size">
                                 <option value="FlatL2">FlatL2</option>
-                                <option value="HSBW">HSBW</option>
+                                <option value="HNSW">HSBW</option>
                             </select>
                         </div>
 
@@ -62,7 +62,7 @@
                 <div class="col text-center result-column">
                     <h3>Search Results</h3>
                     <div class="search-result container-fluid" id="results">
-                        <div class="row justify-content-center mb-3">
+                        <!-- <div class="row justify-content-center mb-3">
                             <div class="col select-column">
                                 <img src="image-1.jpg" alt="Image" class=" img-fluid img-size">
                             </div>
@@ -79,12 +79,10 @@
                                 <img src="image-1.jpg" alt="Image" class="img-fluid img-size">
                             </div>
                             <div class="col select-column">
-                                <!-- <img src="image-1.jpg" alt="Image" class="img-fluid img-size"> -->
                             </div>
                             <div class="col select-column">
-                                <!-- <img src="image-1.jpg" alt="Image" class="img-fluid img-size"> -->
                             </div>
-                        </div>
+                        </div> -->
                         
                     </div>
                     <!-- <img src="image-1.jpg" alt="Image" class="img-fluid" style="display:none;"> -->

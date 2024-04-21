@@ -39,7 +39,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
 });
 
 //display search results
-// TODO
+// TODO: pagination probably needed
 const displayResults = (data) => {
 
     const results = document.getElementById('results');
@@ -51,27 +51,29 @@ const displayResults = (data) => {
 
         for(let i=0;i < data.length; i+=3){
             const row = document.createElement('div');
-            row.className = 'row';
+            row.className = 'row justify-content-center mb-3';
 
             for(let j=i;j<3;j++){
-                if(j >= data.length){
-                    break;
-                }
-                const item = data[j];
-
                 const result = document.createElement('div');
-                result.className = 'result col';
+                result.className = 'result col select-column';
 
-                const image = document.createElement('img');
-                image.src = item;
-                // image.alt = item.caption;
-                image.className= "img-fluid img-size"
+                if(j >= data.length){
+                    row.appendChild(result);
+                    continue;
+                }else{
+                    const item = data[j];
+                    const image = document.createElement('img');
+                    image.src = item;
+                    image.alt = 'Image'
+                    image.className= "img-fluid img-size"
 
-                result.appendChild(image);
-                row.appendChild(result);
+                    result.appendChild(image);
+                    row.appendChild(result);
+                }
+ 
             }
 
-            results.appendChild(col);
+            results.appendChild(row);
         }
     }
 
@@ -79,28 +81,33 @@ const displayResults = (data) => {
 
 //search by caption send request
 const searchByCaption = async (caption, index) => {
-    const url = '/search_by_caption?caption=' + caption;// + '&topk=' + topK;
+    const url = 'http://127.0.0.1:5000/search_by_caption';//?caption=' + caption;// + '&topk=' + topK;
     console.log(url);
+    const query = {
+        caption: caption
+    };
+    console.log(query);
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(query)
         });
 
         if (response.ok) {
-            alert('caption uploaded successfully!');
+            console.log('caption uploaded successfully!');
         } else {
-            alert('Error uploading caption.');
+            console.log('Error uploading caption.');
         }
     } catch (error) {
-        alert('Error uploading caption: ' + error.message);
+        console.log('Error uploading caption: ' + error.message);
     }
     
-    // const data = await response.json();
+    const data = await response.json();
     // displayResults(data);
-    // console.log(data);
+    console.log(data);
 };
 
 //search by image send request
@@ -138,8 +145,8 @@ document.getElementById('submitSearch').addEventListener('click', function() {
         case 'caption':
             var caption = document.getElementById('caption').value;
             if (caption) {
-                // searchByCaption(caption, index);
-                displayResults(["image-1.jpg","image-1.jpg","image-1.jpg","image-1.jpg"]);
+                searchByCaption(caption, index);
+                // displayResults(["image-1.jpg","image-1.jpg","image-1.jpg","image-1.jpg"]);
                 console.log("search by caption.");
             } else {
                 alert('Please enter a caption');

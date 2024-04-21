@@ -28,7 +28,7 @@ extractor = mySigLipModel()
 def search_by_caption():
     data = request.json
     caption = data['caption']
-    k = data.get('k', 10)
+    # k = data.get('k', 10)
 
     print("Caption received:", caption)
 

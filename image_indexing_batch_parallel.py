@@ -12,8 +12,8 @@ import torch.nn as nn
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
 
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-
+# device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+device = torch.device("mps") if torch.cuda.is_available() else torch.device("cpu")
 
 class mySigLipModel(nn.Module):
     def __init__(self):
@@ -31,6 +31,7 @@ class mySigLipModel(nn.Module):
 #load in the embedding extractor
 extractor = mySigLipModel()
 #load in indexer
+
 
 '''
     Select the indexer you want to use

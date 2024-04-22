@@ -35,7 +35,7 @@ def search_by_caption():
     data = request.json
     caption = data['caption']
     # k = data.get('k', 10)
-    k =10
+    k = 50
 
     print("Caption received:", caption)
 
@@ -66,7 +66,7 @@ def search_by_image():
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
-    k = 10 #request.args.get('k', 10)
+    k = 50 #request.args.get('k', 10)
     try:
         k = int(k)
     except ValueError:
@@ -117,9 +117,6 @@ def save_file():
         return jsonify({'message': 'File saved successfully', 'path': os.path.join(save_path, filename)}), 200
     else:
         return jsonify({'error': 'Invalid file type'}), 400
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 @app.errorhandler(404)
 def page_not_found(e):

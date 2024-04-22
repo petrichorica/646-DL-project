@@ -78,6 +78,24 @@ input[type="submit"] {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow to the wrapper */
 }
 
+.search-result {
+  padding-left: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.list {
+  margin: 10px;
+  max-height: 250px;
+  flex-shrink: 1;
+}
+.list:last-child {
+  margin-right: auto;
+}
+.list img {
+  height: 250px;
+}
+
 /* Add some responsive adjustments if necessary */
 @media (max-width: 768px) {
   .col-md {

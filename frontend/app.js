@@ -24,29 +24,40 @@ const displayResults = (data) => {
     if (data.length === 0) {
         results.innerHTML = '<p>No results found</p>'; 
     } else {
-        for(let i = 0; i < data.length; i += 3){ 
-            const row = document.createElement('div');
-            row.className = 'row justify-content-center mb-3';
+        for (let i = 0; i < data.length; i++) {
+            const result = document.createElement('div');
+            result.className = 'list';
+            const item = data[i];
+            const image = document.createElement('img');
+            image.src = item;
+            image.alt = 'Image';
 
-            for(let j = i; j < i + 3; j++){ 
-                if(j >= data.length){
-                    break; 
-                }
-
-                const result = document.createElement('div');
-                result.className = 'col-md-4'; 
-                const item = data[j];
-                const image = document.createElement('img');
-                image.src = item;
-                image.alt = 'Image';
-                image.className = "img-fluid";
-
-                result.appendChild(image);
-                row.appendChild(result); 
-            }
-
-            results.appendChild(row); 
+            result.appendChild(image);
+            container.append(result);
         }
+        // for(let i = 0; i < data.length; i += 3){ 
+        //     const row = document.createElement('div');
+        //     row.className = 'row justify-content-center mb-3';
+
+        //     for(let j = i; j < i + 3; j++){ 
+        //         if(j >= data.length){
+        //             break; 
+        //         }
+
+        //         const result = document.createElement('div');
+        //         result.className = 'col-md-4 list'; 
+        //         const item = data[j];
+        //         const image = document.createElement('img');
+        //         image.src = item;
+        //         image.alt = 'Image';
+        //         image.className = "img-fluid";
+
+        //         result.appendChild(image);
+        //         row.appendChild(result); 
+        //     }
+
+        //     results.appendChild(row); 
+        // }
     }
 };
 

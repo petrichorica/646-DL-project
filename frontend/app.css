@@ -71,6 +71,28 @@ input[type="submit"] {
   width: 100%;
   height: 100%;
 }
+.image-wrapper {
+  background-color: lightblue; /* Light blue background for the wrapper */
+  padding: 10px; /* Padding inside the wrapper */
+  border-radius: 5px; /* Optional: Rounded corners for the wrapper */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow to the wrapper */
+}
+
+/* Add some responsive adjustments if necessary */
+@media (max-width: 768px) {
+  .col-md {
+    flex: 0 0 50%; /* On small screens, use 2 columns */
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  .col-md {
+    flex: 0 0 100%; /* On extra small screens, use 1 column */
+    max-width: 100%;
+  }
+}
+
 /* html,
 body,
 .intro {

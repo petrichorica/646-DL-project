@@ -5,8 +5,14 @@ import json
 from PIL import Image
 from extract_features import mySigLipModel
 import util
+from flask_cors import CORS
+from flask_cors import cross_origin
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+CORS(app)
+
 
 # Limit file upload size to 8MB
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
@@ -29,6 +35,7 @@ def search_by_caption():
     data = request.json
     caption = data['caption']
     # k = data.get('k', 10)
+    k =10
 
     print("Caption received:", caption)
 
@@ -59,7 +66,7 @@ def search_by_image():
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
-    k = request.args.get('k', 10)
+    k = 10 #request.args.get('k', 10)
     try:
         k = int(k)
     except ValueError:
@@ -89,6 +96,30 @@ def search_by_image():
         })
     
     return jsonify({'error': 'Invalid file type'}), 400
+
+
+@app.route('/save_file', methods=['POST'])
+def save_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file:
+        filename = secure_filename(file.filename)
+        # Define the path to the images folder
+        save_path = os.path.join(app.root_path, 'images')
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)  # Create the directory if it does not exist
+        file.save(os.path.join(save_path, filename))
+        return jsonify({'message': 'File saved successfully', 'path': os.path.join(save_path, filename)}), 200
+    else:
+        return jsonify({'error': 'Invalid file type'}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.errorhandler(404)
 def page_not_found(e):

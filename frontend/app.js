@@ -13,156 +13,207 @@ document.getElementById('searchType').addEventListener('change', function() {
     }
 });
 
-//if uploaded, display search image
-document.getElementById('fileInput').addEventListener('change', function() {
-    var file = this.files[0];
-    var imagePreview = document.getElementById('imagePreview');
-    var uploadedImage = document.getElementById('uploadedImage');
 
-    if (file) {
-        var fileType = file.type.split('/')[0]; // Extract file type (e.g., 'image')
-        if (fileType === 'image') {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedImage.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-            imagePreview.style.display = 'block';
-        }else{
-            document.getElementById('fileInput').value = '';
-            alert('Please upload an image file');
-        }
-    } else {
-        uploadedImage.src = '';
-        imagePreview.style.display = 'none';
-    }
-});
-
-//display search results
-// TODO: pagination probably needed
 const displayResults = (data) => {
-
     const results = document.getElementById('results');
     results.innerHTML = '';
+    const container = $('#results');
+    container.empty(); // Clear previous results
+
 
     if (data.length === 0) {
-        results.innerHTML = 'No results found';
+        results.innerHTML = '<p>No results found</p>'; 
     } else {
-
-        for(let i=0;i < data.length; i+=3){
+        for(let i = 0; i < data.length; i += 3){ 
             const row = document.createElement('div');
             row.className = 'row justify-content-center mb-3';
 
-            for(let j=i;j<3;j++){
-                const result = document.createElement('div');
-                result.className = 'result col select-column';
-
+            for(let j = i; j < i + 3; j++){ 
                 if(j >= data.length){
-                    row.appendChild(result);
-                    continue;
-                }else{
-                    const item = data[j];
-                    const image = document.createElement('img');
-                    image.src = item;
-                    image.alt = 'Image'
-                    image.className= "img-fluid img-size"
-
-                    result.appendChild(image);
-                    row.appendChild(result);
+                    break; 
                 }
- 
+
+                const result = document.createElement('div');
+                result.className = 'col-md-4'; 
+                const item = data[j];
+                const image = document.createElement('img');
+                image.src = item;
+                image.alt = 'Image';
+                image.className = "img-fluid";
+
+                result.appendChild(image);
+                row.appendChild(result); 
             }
 
-            results.appendChild(row);
+            results.appendChild(row); 
         }
     }
-
 };
 
-//search by caption send request
-const searchByCaption = async (caption, index) => {
-    const url = 'http://127.0.0.1:5000/search_by_caption';//?caption=' + caption;// + '&topk=' + topK;
-    console.log(url);
-    const query = {
-        caption: caption
-    };
-    console.log(query);
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(query)
-        });
 
-        if (response.ok) {
-            console.log('caption uploaded successfully!');
-        } else {
-            console.log('Error uploading caption.');
+function searchByCaption(caption, index) {
+    const url = 'http://127.0.0.1:5000/search_by_caption';
+    console.log("Sending POST request to:", url);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json', // Set the content type to application/json
+        data: JSON.stringify({
+            caption: caption
+        }),
+        dataType: 'json',
+        success: function(data) {
+            console.log("DATA:");
+            console.log(data);
+            console.log('Caption uploaded successfully!');
+            // displayImages(data.images);
+            displayResults(data.images);
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('Error uploading caption:', textStatus, errorThrown);
         }
-    } catch (error) {
-        console.log('Error uploading caption: ' + error.message);
-    }
-    
-    const data = await response.json();
-    // displayResults(data);
-    console.log(data);
-};
+    });
+}
 
-//search by image send request
-const searchByImage = async (file, index) => {
-    const url = '/search_by_image';
+
+async function searchByImage(file) {
+    const url = 'http://127.0.0.1:5000/search_by_image';
     const formData = new FormData();
     formData.append('file', file);
-    // formData.append('topk', topK);
-    // console.log(url);
+
     try {
+        // Upload image to server
         const response = await fetch(url, {
             method: 'POST',
-            body: formData
+            body: formData,
         });
 
         if (response.ok) {
+            const data = await response.json();
             alert('File uploaded successfully!');
+            console.log("DATA:",data);
+            displayResults(data.images);
+            return data;
         } else {
             alert('Error uploading file.');
+            return null;
         }
     } catch (error) {
         alert('Error uploading file: ' + error.message);
+        return null;
     }
-    // const data = await response.json();
-    // displayResults(data);
-    // console.log(data);
+}
+
+
+function setupImagePreview() {
+    const fileInput = document.getElementById('fileInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadedImage = document.getElementById('uploadedImage');
+    console.log("setupImagePreview");
+
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        console.log("file" + file);
+        if (file) {
+            const fileType = file.type.split('/')[0];  // Extract file type
+            if (fileType === 'image') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                // Optionally, immediately upload the image after previewing
+                //uploadImage(file);
+                uploadImage(file);
+                filepath = "/Users/ruiqiliu/Desktop/646-DL-project/images/" + file.name;
+                file.name = filepath;
+                searchByImage(file);
+            } else {
+                fileInput.value = ''; // Reset file input
+                alert('Please upload an image file');
+            }
+        } else {
+            uploadedImage.src = '';
+            imagePreview.style.display = 'none';
+        }
+    });
+}
+
+$(function() {
+    setupImagePreview();
+    // Rest of the onload code...
+});
+
+
+window.onload = function() {
+
+    $("#searchType").change(function(){
+        var searchType = $("#searchType").val();
+
+        // Reset the file input and search result display
+        document.getElementById('fileInput').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        $("#results").empty();
+
+        if(searchType === "image"){
+            // Rebind the click event for the search button when the search type is 'image'
+            $("#submitSearch").off('click').click(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                setupImagePreview();
+                // Trigger the file input click event to open the file dialog
+                $("#fileInput").click();
+            });
+        } else {
+            // Rebind the click event for the search button when the search type is 'caption'
+            $("#submitSearch").off('click').click(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                searchCaption();
+            });
+        }
+    });
 };
 
-//search button click event
-document.getElementById('submitSearch').addEventListener('click', function() {
 
-    var searchType = document.getElementById('searchType').value;
-    var index = document.getElementById('indexOption').value;
-    switch (searchType) {
-        case 'caption':
-            var caption = document.getElementById('caption').value;
-            if (caption) {
-                searchByCaption(caption, index);
-                // displayResults(["image-1.jpg","image-1.jpg","image-1.jpg","image-1.jpg"]);
-                console.log("search by caption.");
-            } else {
-                alert('Please enter a caption');
-            }
-            break;
-        case 'image':
-            var file = document.getElementById('fileInput').files[0];
-            if (file) {
-                // searchByImage(file, index);
-                displayResults(["image-1.jpg"]);
-                console.log("search by image.");
-            } else {
-                alert('Please upload an image');
-            }
-            break;
-        default:
-            alert('Please select a search type');
+
+function searchCaption() {
+    var caption = $("#caption").val();
+    var index = $("#indexOption").val();
+
+     // Additional checks
+     if (validate(caption) || validate(index)) {
+        // Query creation endpoint
+        searchByCaption(caption, index);
+    } else{
+        console.log("Not valid input");
     }
-});
+}
+
+const validate=(element)=>{
+    return !(element === "" || element == null);
+};
+
+
+
+function uploadImage(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    fetch("http://127.0.0.1:5000/save_file", {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Image uploaded and saved successfully!');
+
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error uploading file.');
+    });
+}
+

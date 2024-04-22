@@ -4,7 +4,6 @@ import numpy as np
 import json
 from PIL import Image
 from extract_features import mySigLipModel
-import util
 from flask_cors import CORS
 from flask_cors import cross_origin
 import os
@@ -17,11 +16,11 @@ CORS(app)
 # Limit file upload size to 8MB
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
-index_path = util.index_path
+index_path = 'indexed_0-100k/siglip-image-index-0-10k.bin'
 index = faiss.read_index(index_path)
 print("Total vectors in the index:", index.ntotal)
 
-image_path = util.image_path
+image_path = 'indexed_0-100k/siglip_image_urls-0-10k.json'
 
 with open(image_path, "r") as f:
     image_urls = json.load(f)

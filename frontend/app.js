@@ -134,6 +134,9 @@ function setupImagePreview() {
     
             } else {
                 fileInput.value = ''; // Reset file input
+                uploadedFileObj = null;
+                imagePreview.style.display = 'none';
+                uploadedImage.src = '';
                 alert('Please upload an image file');
             }
         }
@@ -154,6 +157,8 @@ window.onload = function() {
         // Reset the file input and search result display
         document.getElementById('fileInput').value = '';
         document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('uploadedImage').src = '';
+        uploadedFileObj = null;
         $("#results").empty();
 
         if(searchType === "image"){

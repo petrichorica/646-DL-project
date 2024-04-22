@@ -77,11 +77,16 @@ function searchByCaption(caption, index) {
     });
 }
 
+let uploadedFileObj = null;
 
-async function searchByImage(file) {
+async function searchByImage() {
+    if (!uploadedFileObj) {
+        alert('Please upload an image file');
+        return;
+    }
     const url = 'http://127.0.0.1:5000/search_by_image';
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', uploadedFileObj);
 
     try {
         // Upload image to server
@@ -92,7 +97,7 @@ async function searchByImage(file) {
 
         if (response.ok) {
             const data = await response.json();
-            alert('File uploaded successfully!');
+            // alert('File uploaded successfully!');
             console.log("DATA:",data);
             displayResults(data.images);
             return data;
@@ -106,15 +111,15 @@ async function searchByImage(file) {
     }
 }
 
-
 function setupImagePreview() {
     const fileInput = document.getElementById('fileInput');
     const imagePreview = document.getElementById('imagePreview');
     const uploadedImage = document.getElementById('uploadedImage');
     console.log("setupImagePreview");
 
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
+    fileInput.addEventListener('change', (event) => {
+        event.preventDefault();
+        const file = fileInput.files[0];
         console.log("file" + file);
         if (file) {
             const fileType = file.type.split('/')[0];  // Extract file type
@@ -125,22 +130,14 @@ function setupImagePreview() {
                     imagePreview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
-
-                // Optionally, immediately upload the image after previewing
-                //uploadImage(file);
-                uploadImage(file);
-                filepath = "/Users/ruiqiliu/Desktop/646-DL-project/images/" + file.name;
-                file.name = filepath;
-                searchByImage(file);
+                uploadedFileObj = file;
+    
             } else {
                 fileInput.value = ''; // Reset file input
                 alert('Please upload an image file');
             }
-        } else {
-            uploadedImage.src = '';
-            imagePreview.style.display = 'none';
         }
-    });
+    })
 }
 
 $(function() {
@@ -163,9 +160,7 @@ window.onload = function() {
             // Rebind the click event for the search button when the search type is 'image'
             $("#submitSearch").off('click').click(function(event) {
                 event.preventDefault(); // Prevent the default form submission
-                setupImagePreview();
-                // Trigger the file input click event to open the file dialog
-                $("#fileInput").click();
+                searchByImage();
             });
         } else {
             // Rebind the click event for the search button when the search type is 'caption'

@@ -9,18 +9,18 @@ from flask_cors import cross_origin
 import os
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
 
 # Limit file upload size to 8MB
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
-index_path = 'indexed_0-100k/siglip-image-index-0-10k.bin'
+index_path = './l2_index/0-200k.bin'
 index = faiss.read_index(index_path)
 print("Total vectors in the index:", index.ntotal)
 
-image_path = 'indexed_0-100k/siglip_image_urls-0-10k.json'
+image_path = './l2_index/0-200k.json'
 
 with open(image_path, "r") as f:
     image_urls = json.load(f)
@@ -28,6 +28,10 @@ print("Number of URLs loaded:", len(image_urls))
 
 
 extractor = mySigLipModel()
+
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('app.html')
 
 @app.route('/search_by_caption', methods=['POST'])
 def search_by_caption():
@@ -125,4 +129,4 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

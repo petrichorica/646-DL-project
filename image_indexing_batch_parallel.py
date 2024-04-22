@@ -11,6 +11,8 @@ import torch.nn as nn
 
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
+# import os
+# os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 device = torch.device("mps") if torch.cuda.is_available() else torch.device("cpu")

@@ -1,7 +1,7 @@
 feature_root = './hnsw_index_0-100k/'
 
-start_idx = 0
-end_idx = 10000
+start_idx = 50000
+end_idx = 60000
 
 index = 'HNSWFlat'
 # index = 'FlatL2'

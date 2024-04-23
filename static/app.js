@@ -1,3 +1,5 @@
+const host_url = '127.0.0.1:5000';
+
 //display different search type input form
 document.getElementById('searchType').addEventListener('change', function() {
     var searchType = this.value;
@@ -63,7 +65,7 @@ const displayResults = (data) => {
 
 
 function searchByCaption(caption, index) {
-    const url = 'http://127.0.0.1:5000/search_by_caption';
+    const url = `http://${host_url}/search_by_caption?indexing=${index}`
     console.log("Sending POST request to:", url);
 
     $.ajax({
@@ -95,7 +97,8 @@ async function searchByImage() {
         alert('Please upload an image file');
         return;
     }
-    const url = 'http://127.0.0.1:5000/search_by_image';
+    const index = $("#indexOption").val();
+    const url = `http://${host_url}/search_by_image?indexing=${index}`;
     const formData = new FormData();
     formData.append('file', uploadedFileObj);
 
@@ -163,7 +166,7 @@ $(function() {
 window.onload = function() {
 
     $("#searchType").change(function(){
-        var searchType = $("#searchType").val();
+        const searchType = $("#searchType").val();
 
         // Reset the file input and search result display
         document.getElementById('fileInput').value = '';
@@ -191,8 +194,8 @@ window.onload = function() {
 
 
 function searchCaption() {
-    var caption = $("#caption").val();
-    var index = $("#indexOption").val();
+    const caption = $("#caption").val();
+    const index = $("#indexOption").val();
 
      // Additional checks
      if (validate(caption) || validate(index)) {
@@ -212,7 +215,7 @@ const validate=(element)=>{
 function uploadImage(file) {
     const formData = new FormData();
     formData.append('file', file);
-    fetch("http://127.0.0.1:5000/save_file", {
+    fetch(`http://${host_url}/save_file`, {
         method: 'POST',
         body: formData
     })

@@ -16,16 +16,25 @@ CORS(app)
 # Limit file upload size to 8MB
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 
-index_path = './l2_index/0-200k.bin'
-index = faiss.read_index(index_path)
-print("Total vectors in the index:", index.ntotal)
+l2_index_path = './l2_index/0-200k.bin'
+image_path_l2 = './l2_index/0-200k.json'
 
-image_path = './l2_index/0-200k.json'
+hnsw_index_path = './hnsw_index/0-100k.bin'
+image_path_hnsw = './hnsw_index/0-100k.json'
 
-with open(image_path, "r") as f:
-    image_urls = json.load(f)
-print("Number of URLs loaded:", len(image_urls))
+l2_index = faiss.read_index(l2_index_path)
+print("Total vectors in the l2 index:", l2_index.ntotal)
 
+with open(image_path_l2, "r") as f:
+    image_urls_l2 = json.load(f)
+print("Number of URLs loaded:", len(image_urls_l2))
+
+hnsw_index = faiss.read_index(hnsw_index_path)
+print("Total vectors in the hnsw index:", hnsw_index.ntotal)
+
+with open(image_path_hnsw, "r") as f:
+    image_urls_hnsw = json.load(f)
+print("Number of URLs loaded:", len(image_urls_hnsw))
 
 extractor = mySigLipModel()
 
@@ -37,10 +46,12 @@ def home():
 def search_by_caption():
     data = request.json
     caption = data['caption']
+    indexing = request.args.get('indexing', 'FlatL2')
     # k = data.get('k', 10)
     k = 50
 
     print("Caption received:", caption)
+    print("Indexing:", indexing)
 
     caption_embedding = extractor.get_text_embedding(caption)
     # print("Caption Embedding:", caption_embedding)
@@ -51,9 +62,16 @@ def search_by_caption():
 
     print("Query Vector Shape:", query_vector.shape)
 
-    distances, indices = index.search(query_vector, k)
+    if indexing == 'FlatL2':
+        distances, indices = l2_index.search(query_vector, k)
+        result_images = [image_urls_l2[idx] for idx in indices[0]]
 
-    result_images = [image_urls[idx] for idx in indices[0]]
+    elif indexing == 'HNSW':
+        distances, indices = hnsw_index.search(query_vector, k)
+        result_images = [image_urls_hnsw[idx] for idx in indices[0]]
+
+    else:
+        return jsonify({'error': 'Invalid indexing method'}), 400
 
     return jsonify({
         'distances': distances.tolist(),
@@ -70,15 +88,13 @@ def search_by_image():
     
     file = request.files['file']
     k = 50 #request.args.get('k', 10)
-    try:
-        k = int(k)
-    except ValueError:
-        return jsonify({'error': 'Invalid value for k'}), 400
+    indexing = request.args.get('indexing', 'FlatL2')
 
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
     print("File received:", file.filename)
+    print("Indexing:", indexing)
 
     if file and allowed_file(file.filename):
         image = Image.open(file.stream)
@@ -89,9 +105,14 @@ def search_by_image():
 
         print("Query Vector Shape:", query_vector.shape)
 
-        distances, indices = index.search(query_vector, k)
-
-        result_images = [image_urls[idx] for idx in indices[0]]
+        if indexing == 'FlatL2':
+            distances, indices = l2_index.search(query_vector, k)
+            result_images = [image_urls_l2[idx] for idx in indices[0]]
+        elif indexing == 'HNSW':
+            distances, indices = hnsw_index.search(query_vector, k)
+            result_images = [image_urls_hnsw[idx] for idx in indices[0]]
+        else:
+            return jsonify({'error': 'Invalid indexing method'}), 400
 
         return jsonify({
             'distances': distances.tolist(),

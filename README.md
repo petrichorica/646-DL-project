@@ -4,13 +4,16 @@ Yidan Cheng\
 Ruiqi Liu\
 Jiarui Liang
 
-## Todo List
-- [ ] convert all images into embeddings and generate indexed files
-- [ ] test with the indexed files for searching
-- [ ] evaluation methodologies
-- [ ] progress report
-## What has been implemented
-- Model and embedding extractor
-- indexing function
-- search function
-- temporary image display function
+## Problem Setup
+1. Data Vectorization by SigLIP
+2. Data Indexing by FAISS
+3. Image Retrieval via Web Demo 
+  - User Input Query
+  - Query Vectorization
+  - Fast Image Retrieval based on Query
+  - Display Returned Images
+4. Evaluation: Recall@K, User Rating
+
+## Other Deliverables
+Our web demo is published under [web demo](http://18.216.139.37/). \
+Our presentation is stored [here]()

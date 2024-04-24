@@ -1,8 +1,8 @@
 # 646-DL-project
 ## Team Member
-Yidan Cheng\
-Ruiqi Liu\
-Jiarui Liang
+Yidan Cheng (yc181)\
+Ruiqi Liu (rl115)\
+Jiarui Liang (jl361)
 
 ## Problem Setup
 1. Data Vectorization by SigLIP
